@@ -4,6 +4,7 @@ using ManageCars.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManageCars.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260301144754_ConversationAndMessage")]
+    partial class ConversationAndMessage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,14 +147,11 @@ namespace ManageCars.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("DisplayName")
+                    b.Property<string>("User1")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("IsClosed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("SenderKey")
+                    b.Property<string>("User2")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -202,7 +202,6 @@ namespace ManageCars.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("ConversationId")
@@ -211,17 +210,11 @@ namespace ManageCars.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("SenderKey")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ConversationId");
 
                     b.ToTable("Messages");
                 });
@@ -402,17 +395,6 @@ namespace ManageCars.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("ManageCars.Models.Message", b =>
-                {
-                    b.HasOne("ManageCars.Models.Conversation", "Conversation")
-                        .WithMany("Messages")
-                        .HasForeignKey("ConversationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Conversation");
-                });
-
             modelBuilder.Entity("ManageCars.Models.Order", b =>
                 {
                     b.HasOne("ManageCars.Models.Car", "Car")
@@ -434,11 +416,6 @@ namespace ManageCars.Migrations
             modelBuilder.Entity("ManageCars.Models.CarCategorys", b =>
                 {
                     b.Navigation("Cars");
-                });
-
-            modelBuilder.Entity("ManageCars.Models.Conversation", b =>
-                {
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("ManageCars.Models.Order", b =>
